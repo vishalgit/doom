@@ -81,7 +81,22 @@
   (setq evil-escape-key-sequence "jk"
         evil-escape-delay 0.2 ))
 ;; Org mode settings
-(map! :map org-mode-map
-      :leader
-      :desc "Org confirm / Org commit"
-      "m c" #'org-ctrl-c-ctrl-c)
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+;; Magit style agenda mode
+(after! org-agenda
+  (map! :map org-agenda-mode-map
+        :leader
+        (:prefix ("m" . "agenda")
+         :desc "Next period"      "f" #'org-agenda-later
+         :desc "Previous period"  "b" #'org-agenda-earlier
+         :desc "Today"            "." #'org-agenda-goto-today
+         :desc "Goto date"        "j" #'org-agenda-goto-date
+         :desc "Toggle TODO"      "t" #'org-agenda-todo
+         :desc "Schedule"         "s" #'org-agenda-schedule
+         :desc "Deadline"         "d" #'org-agenda-deadline
+         :desc "Priority"         "p" #'org-agenda-priority
+         :desc "Follow mode"      "F" #'org-agenda-follow-mode
+         :desc "Redo"             "g" #'org-agenda-redo
+         :desc "Quit agenda"      "q" #'org-agenda-quit)))
