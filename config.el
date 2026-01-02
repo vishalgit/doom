@@ -23,7 +23,7 @@
 ;;
 (setq doom-font
       (font-spec :family "JetBrainsMono Nerd Font"
-                 :size 18
+                 :size 22
                  :weight 'semibold))
 ;;      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))
 ;;
