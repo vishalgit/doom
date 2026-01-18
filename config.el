@@ -22,8 +22,8 @@
 ;; accept. For example:
 ;;
 (setq doom-font
-      (font-spec :family "JetBrainsMono Nerd Font Propo"
-                 :size 22
+      (font-spec :family "JetBrainsMono Nerd Font Mono"
+                 :size 20
                  :weight 'semibold))
 ;;      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))
 ;;
