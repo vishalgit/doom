@@ -1,3 +1,20 @@
+#+title: Doom Configuration
+#+author: Vishal Saxena
+#+startup: overview
+
+* table of content :TOC:
+- [[#configuration][configuration]]
+  - [[#bootstrap][bootstrap]]
+  - [[#load-configs][load configs]]
+  - [[#footer][footer]]
+
+* configuration
+:PROPERTIES:
+:header-args:elisp: :tangle config.el :lexical t
+:END:
+** bootstrap
+Ensure that this file auto tangles itself on save
+#+begin_src elisp
 ;;; config.el -*- lexical-binding: t; -*-
 ;; When config.org is saved, tangle all .org files in configs/ then config.org
 (defun ns/tangle-config-org ()
@@ -17,10 +34,17 @@
       (org-babel-tangle)
       (message "Done! Tangled %d file(s) + config.org" (length org-files)))))
 (add-hook 'after-save-hook #'ns/tangle-config-org)
+#+end_src
 
+** load configs
+#+begin_src elisp
 (load! "configs/personal")
 (load! "configs/fonts")
 (load! "configs/settings")
 (load! "configs/orgsettings")
+#+end_src
 
+** footer
+#+begin_src elisp
 ;; config.el ends here
+#+end_src
