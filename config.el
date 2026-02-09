@@ -1,26 +1,102 @@
-;;; config.el -*- lexical-binding: t; -*-
-;; When config.org is saved, tangle all .org files in configs/ then config.org
-(defun ns/tangle-config-org ()
-  "When config.org is saved, tangle all .org files in configs/then config.org."
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "config.org" doom-user-dir))
-    (let* ((config-dir (expand-file-name "configs/" doom-user-dir))
-           (org-files (when (file-directory-p config-dir)
-                        (directory-files config-dir t "\\.org$")))
-           (org-confirm-babel-evaluate nil))
-      ;; Tangle all files in configs directory first
-      (dolist (file org-files)
-        (message "Tangling %s..."(file-name-nondirectory file))
-        (org-babel-tangle-file file))
-      ;; Tangle config.org last
-      (message "Tangling config.org...")
-      (org-babel-tangle)
-      (message "Done! Tangled %d file(s) + config.org" (length org-files)))))
-(add-hook 'after-save-hook #'ns/tangle-config-org)
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(load! "configs/personal")
-(load! "configs/fonts")
-(load! "configs/settings")
-(load! "configs/orgsettings")
+;; Place your private configuration here! Remember, you do not need to run 'doom
+;; sync' after modifying this file!
 
-;; config.el ends here
+
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;;
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-symbol-font' -- for symbols
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+;;
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+(setq doom-font
+      (font-spec :family "JetBrainsMono Nerd Font Mono"
+                 :size 20
+                 :weight 'semibold))
+;;      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+(setq doom-theme 'doom-gruvbox)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type t)
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
+
+
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package!' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+;;
+;; To get information about any of these functions/macros, move the cursor over
+;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
+;;
+;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+;; they are implemented.
+(after! evil-escape
+  (setq evil-escape-key-sequence "jk"
+        evil-escape-delay 0.2 ))
+;; Org mode settings
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+;; Magit style agenda mode
+(after! org-agenda
+  (map! :map org-agenda-mode-map
+        :leader
+        (:prefix ("m" . "agenda")
+         :desc "Next period"      "f" #'org-agenda-later
+         :desc "Previous period"  "b" #'org-agenda-earlier
+         :desc "Today"            "." #'org-agenda-goto-today
+         :desc "Goto date"        "j" #'org-agenda-goto-date
+         :desc "Toggle TODO"      "t" #'org-agenda-todo
+         :desc "Schedule"         "s" #'org-agenda-schedule
+         :desc "Deadline"         "d" #'org-agenda-deadline
+         :desc "Priority"         "p" #'org-agenda-priority
+         :desc "Follow mode"      "F" #'org-agenda-follow-mode
+         :desc "Redo"             "g" #'org-agenda-redo
+         :desc "Quit agenda"      "q" #'org-agenda-quit)))
