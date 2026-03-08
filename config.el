@@ -82,8 +82,8 @@
 (setq user-full-name "Vishal Saxena"
        user-mail-address "vishal.reply@gmail.com")
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font Mono" :size 16 :weight 'semi-bold)
-      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 18))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 22 :weight 'semi-bold)
+      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
 
 (setq doom-theme 'doom-gruvbox)
 
